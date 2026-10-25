@@ -1,10 +1,32 @@
-.env
-.env.*
-!.env.example
-.venv/
-venv/
+# Python
 __pycache__/
 *.py[cod]
-.DS_Store
+*.egg-info/
+dist/
+build/
 
-.vscode
+# Virtual environments
+.venv/
+venv/
+
+# Environment and secrets
+.env
+.env.*
+
+# Allow the example environment file
+!.env.example
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+
+# Generated data
+data/
+*.csv
+*.parquet
+*.pq
+
