@@ -8,7 +8,7 @@ from tempfile import TemporaryDirectory
 import pandas as pd
 import requests
 
-# from "../src/delta_vault/" import delta_api as api
+from src.delta_vault import delta_api as api
 
 
 class TestDeltaAPI(unittest.TestCase):
@@ -55,7 +55,7 @@ class TestDeltaAPI(unittest.TestCase):
     # API REQUEST TESTS
     # --------------------------------------------------
 
-    @patch("main_api.session.get")
+    @patch("src.delta_vault.delta_api.session.get")
     def test_api_get_success(self, mock_get):
         """A successful API response should return JSON."""
         mock_response = Mock()
@@ -72,7 +72,7 @@ class TestDeltaAPI(unittest.TestCase):
         self.assertEqual(len(result["result"]), 2)
         mock_get.assert_called_once()
 
-    @patch("main_api.session.get")
+    @patch("src.delta_vault.delta_api.session.get")
     def test_api_get_http_error(self, mock_get):
         """HTTP errors should propagate to the caller."""
         mock_response = Mock()
@@ -85,7 +85,7 @@ class TestDeltaAPI(unittest.TestCase):
         with self.assertRaises(requests.HTTPError):
             api.api_get("/invalid-endpoint")
 
-    @patch("main_api.session.get")
+    @patch("src.delta_vault.delta_api.session.get")
     def test_api_get_timeout(self, mock_get):
         """Network timeouts should propagate."""
         mock_get.side_effect = requests.Timeout("Request timed out")
@@ -97,7 +97,7 @@ class TestDeltaAPI(unittest.TestCase):
     # PRODUCT DATA TESTS
     # --------------------------------------------------
 
-    @patch("main_api.api_get")
+    @patch("src.delta_vault.delta_api.api_get")
     def test_fetch_products(self, mock_api_get):
         """Product responses should be saved and returned."""
         mock_api_get.return_value = {
@@ -124,7 +124,7 @@ class TestDeltaAPI(unittest.TestCase):
             finally:
                 api.OUTPUT_DIR = original_dir
 
-    @patch("main_api.api_get")
+    @patch("src.delta_vault.delta_api.api_get")
     def test_product_pagination(self, mock_api_get):
         """The next cursor should fetch the following page."""
         mock_api_get.side_effect = [
@@ -159,7 +159,7 @@ class TestDeltaAPI(unittest.TestCase):
     # CANDLE DATA TESTS
     # --------------------------------------------------
 
-    @patch("main_api.api_get")
+    @patch("src.delta_vault.delta_api.api_get")
     def test_fetch_candles(self, mock_api_get):
         """Candle data should be parsed, cleaned and saved."""
         mock_api_get.return_value = {
@@ -190,7 +190,7 @@ class TestDeltaAPI(unittest.TestCase):
             finally:
                 api.OUTPUT_DIR = original_dir
 
-    @patch("main_api.api_get")
+    @patch("src.delta_vault.delta_api.api_get")
     def test_empty_candle_response(self, mock_api_get):
         """An empty candle response should return an empty DataFrame."""
         mock_api_get.return_value = {
@@ -206,7 +206,7 @@ class TestDeltaAPI(unittest.TestCase):
 
         self.assertTrue(df.empty)
 
-    @patch("main_api.api_get")
+    @patch("src.delta_vault.delta_api.api_get")
     def test_missing_timestamp(self, mock_api_get):
         """Malformed candle responses should fail clearly."""
         mock_api_get.return_value = {
