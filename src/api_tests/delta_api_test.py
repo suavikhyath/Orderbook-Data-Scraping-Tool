@@ -4,7 +4,6 @@ import unittest
 from unittest.mock import Mock, patch
 from pathlib import Path
 from tempfile import TemporaryDirectory
-
 import pandas as pd
 import requests
 
@@ -84,6 +83,8 @@ class TestDeltaAPI(unittest.TestCase):
 
         with self.assertRaises(requests.HTTPError):
             api.api_get("/invalid-endpoint")
+
+
 
     @patch("src.delta_vault.delta_api.session.get")
     def test_api_get_timeout(self, mock_get):
@@ -280,6 +281,236 @@ class TestDeltaAPI(unittest.TestCase):
             min(candle["open"], candle["close"]),
         )
 
+        # ==============================
+        # Additional Edge Case Tests
+        # ==============================
+
+    @patch("src.delta_vault.delta_api.session.get")
+    def test_api_get_api_error(self, mock_get):
+        mock_response = Mock()
+        mock_response.json.return_value = {
+            "success": False,
+            "error": "Invalid request"
+        }
+        mock_response.raise_for_status.return_value = None
+        mock_get.return_value = mock_response
+
+        with self.assertRaises(RuntimeError):
+            api.api_get("/v2/products")
+
+
+    @patch("src.delta_vault.delta_api.session.get")
+    def test_api_get_malformed_json(self, mock_get):
+        mock_response = Mock()
+        mock_response.raise_for_status.return_value = None
+        mock_response.json.side_effect = requests.exceptions.JSONDecodeError(
+            "Invalid JSON", "not valid json", 0
+        )
+        mock_get.return_value = mock_response
+
+        with self.assertRaises(requests.exceptions.JSONDecodeError):
+            api.api_get("/v2/products")
+
+    @patch("src.delta_vault.delta_api.session.get")
+    def test_api_get_connection_error(self, mock_get):
+        mock_get.side_effect = requests.ConnectionError(
+            "Connection failed"
+        )
+
+        with self.assertRaises(requests.ConnectionError):
+            api.api_get("/v2/products")
+
+
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_products_missing_result(self, mock_api_get):
+        mock_api_get.return_value = {
+            "success": True,
+            "meta": {}
+        }
+
+        with TemporaryDirectory() as tmp:
+            original_dir = api.OUTPUT_DIR
+            api.OUTPUT_DIR = Path(tmp)
+
+            try:
+                products = api.fetch_all_products()
+                self.assertTrue(products.empty)
+            finally:
+                api.OUTPUT_DIR = original_dir
+
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_empty_products_response(self, mock_api_get):
+        mock_api_get.return_value = {
+            "success": True,
+            "result": [],
+            "meta": {}
+        }
+
+        with TemporaryDirectory() as tmp:
+            original_dir = api.OUTPUT_DIR
+            api.OUTPUT_DIR = Path(tmp)
+
+            try:
+                products = api.fetch_all_products()
+                self.assertTrue(products.empty)
+            finally:
+                api.OUTPUT_DIR = original_dir
+
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_repeated_pagination_cursor(self, mock_api_get):
+        response = {
+            "success": True,
+            "result": [self.sample_products[0]],
+            "meta": {"after": "cursor-2"}
+        }
+        mock_api_get.side_effect = [response, response]
+
+        with TemporaryDirectory() as tmp:
+            original_dir = api.OUTPUT_DIR
+            api.OUTPUT_DIR = Path(tmp)
+
+            try:
+                api.fetch_all_products()
+                self.assertEqual(mock_api_get.call_count, 2)
+            finally:
+                api.OUTPUT_DIR = original_dir
+
+
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_missing_candle_fields(self, mock_api_get):
+        mock_api_get.return_value = {
+            "success": True,
+            "result": [{
+                "time": 1792832400,
+                "open": 10
+            }]
+        }
+
+        with self.assertRaises(ValueError):
+            api.fetch_candles(
+                "IOSTUSD", resolution="1h", hours=24
+            )
+
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_invalid_candle_values(self, mock_api_get):
+        mock_api_get.return_value = {
+            "success": True,
+            "result": [{
+                "time": 1792832400,
+                "open": "invalid",
+                "high": 12,
+                "low": 9,
+                "close": 11,
+                "volume": 100
+            }]
+        }
+
+        df = api.fetch_candles(
+            "IOSTUSD", resolution="1h", hours=24
+        )
+
+        self.assertTrue(df.empty)
+
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_invalid_timestamp(self, mock_api_get):
+        mock_api_get.return_value = {
+            "success": True,
+            "result": [{
+                "time": "invalid",
+                "open": 10,
+                "high": 12,
+                "low": 9,
+                "close": 11,
+                "volume": 100
+            }]
+        }
+
+        df = api.fetch_candles(
+            "IOSTUSD", resolution="1h", hours=24
+        )
+
+        self.assertTrue(df.empty)
+
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_missing_volume(self, mock_api_get):
+        mock_api_get.return_value = {
+            "success": True,
+            "result": [{
+                "time": 1792832400,
+                "open": 10,
+                "high": 12,
+                "low": 9,
+                "close": 11
+            }]
+        }
+
+        with self.assertRaises(ValueError):
+            api.fetch_candles(
+                "IOSTUSD", resolution="1h", hours=24
+            )
+
+    def test_api_get_http_errors(self):
+        error_codes = [
+            400, 401, 403, 422,
+            429,
+            500, 502, 503, 504
+        ]
+
+        for status_code in error_codes:
+            with self.subTest(status_code=status_code):
+                mock_response = Mock()
+                mock_response.status_code = status_code
+                mock_response.url = "https://api.example.com/v2/products"
+
+                mock_response.raise_for_status.side_effect = requests.HTTPError(
+                    f"{status_code} HTTP Error"
+                )
+
+                with patch.object(
+                        api.session, "get", return_value=mock_response
+                ):
+                    with self.assertRaises(requests.HTTPError):
+                        api.api_get("/v2/products")
+
+    # ==============================
+    # Zero and Negative Interval Tests
+    # ==============================
+
+    @patch("src.delta_vault.delta_api.time.time", return_value=1700000000)
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_fetch_candles_zero_interval(self, mock_api_get, mock_time):
+        mock_api_get.return_value = {"result": []}
+
+        api.fetch_candles("IOSTUSD", hours=0)
+
+        expected_params = {
+            "symbol": "IOSTUSD",
+            "resolution": "1h",
+            "start": 1700000000,
+            "end": 1700000000,
+        }
+
+        mock_api_get.assert_called_once_with(
+            "/v2/history/candles", expected_params
+        )
+
+    @patch("src.delta_vault.delta_api.time.time", return_value=1700000000)
+    @patch("src.delta_vault.delta_api.api_get")
+    def test_fetch_candles_negative_interval(self, mock_api_get, mock_time):
+        mock_api_get.return_value = {"result": []}
+
+        api.fetch_candles("IOSTUSD", hours=-24)
+
+        expected_params = {
+            "symbol": "IOSTUSD",
+            "resolution": "1h",
+            "start": 1700000000 + (24 * 3600),
+            "end": 1700000000,
+        }
+
+        mock_api_get.assert_called_once_with(
+            "/v2/history/candles", expected_params
+        )
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

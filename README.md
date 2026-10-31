@@ -202,3 +202,8 @@ Offline unit tests should use mocked HTTP responses so that normal test runs do 
 **Current milestone:** Provider API integrations.
 
 The immediate objective is to transform the existing exchange-specific implementations into a consistent, testable data pipeline. Persistent storage, normalization, and automated ingestion remain future milestones until implemented and verified.
+
+
+## Additional Testing Documentation
+
+- [Delta API – Additional Testing Findings](docs/deltaapi_extratests_findings.md)
