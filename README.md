@@ -47,7 +47,8 @@ Club Data Vault
 
 The current Upstox integration retrieves historical candle data using the Upstox Historical Candle API.
 
-**Current capabilities**
+## Current capabilities
+
 - Authenticated API requests using an access token.
 - Historical candle retrieval for a specified instrument and date range.
 - Conversion of API responses into a Pandas DataFrame.
@@ -134,7 +135,7 @@ print(df.head())
 The function returns a Pandas DataFrame containing:
 
 | Column | Description |
-|---|---|
+| --- | --- |
 | `timestamp` | Candle timestamp |
 | `open` | Opening price |
 | `high` | Highest price |
@@ -167,24 +168,29 @@ Offline unit tests should use mocked HTTP responses so that normal test runs do 
 ## Planned Development
 
 ### Phase 1 — Instrument Discovery and Test Coverage
+
 - Implement Upstox instrument lookup using official instrument master data.
 - Audit existing provider tests and add only missing coverage.
 
 ### Phase 2 — Unified Data Model
+
 - Define a common OHLCV schema.
 - Standardize timestamp conventions, identifiers, numeric types, and provider metadata.
 - Normalize both providers' responses.
 
 ### Phase 3 — Data Quality
+
 - Detect duplicate candles, missing fields, invalid prices, and inconsistent timestamps.
 - Establish validation rules and automated tests.
 
 ### Phase 4 — Storage
+
 - Evaluate CSV and Parquet against expected data volume and access patterns.
 - Implement persistent storage and incremental updates.
 - Prevent duplicate records during repeated ingestion.
 
 ### Phase 5 — Unified Ingestion
+
 - Provide a common interface for retrieving data from supported providers.
 - Add logging, retries, rate-limit handling, and end-to-end tests.
 
