@@ -10,7 +10,10 @@ readme = "docs/README.md"
 requires-python = ">=3.10"
 dependencies = [
     "requests>=2.31",
-    "pandas>=2.0"
+    "pandas>=2.0",
+    "pyarrow>=25.0.1",
+    "huggingface-hub>=2.4.0",
+    "python-dotenv>=1.2.4",
 ]
 
 [project.optional-dependencies]

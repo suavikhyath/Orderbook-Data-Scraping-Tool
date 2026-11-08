@@ -31,3 +31,5 @@ data/
 *.pq
 
 .DS_Store
+
+src/deltadataset/data/

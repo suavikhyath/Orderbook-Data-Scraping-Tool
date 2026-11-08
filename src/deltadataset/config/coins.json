@@ -1,0 +1,301 @@
+{
+  "source": "CoinGecko",
+  "ranking": "market_cap_desc",
+  "snapshot_date": "2026-11-08T05:22:44.027065+00:00",
+  "resolution": "1m",
+  "lookback_days": 730,
+  "coins": [
+    {
+      "rank": 1,
+      "id": "bitcoin",
+      "name": "Bitcoin",
+      "symbol": "BTC",
+      "market_cap_usd": 1524525837809,
+      "delta_symbol": "BTCUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "BTCUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "ethereum",
+      "name": "Ethereum",
+      "symbol": "ETH",
+      "market_cap_usd": 273132103583,
+      "delta_symbol": "ETHUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "ETHUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "tether",
+      "name": "Tether",
+      "symbol": "USDT",
+      "market_cap_usd": 176852696829,
+      "delta_symbol": null,
+      "delta_candidates": []
+    },
+    {
+      "rank": 4,
+      "id": "binancecoin",
+      "name": "BNB",
+      "symbol": "BNB",
+      "market_cap_usd": 91489022761,
+      "delta_symbol": "BNBUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "BNBUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "id": "ripple",
+      "name": "XRP",
+      "symbol": "XRP",
+      "market_cap_usd": 73835549654,
+      "delta_symbol": "XRPUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "XRPUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "id": "usd-coin",
+      "name": "USDC",
+      "symbol": "USDC",
+      "market_cap_usd": 70476661656,
+      "delta_symbol": null,
+      "delta_candidates": []
+    },
+    {
+      "rank": 7,
+      "id": "solana",
+      "name": "Solana",
+      "symbol": "SOL",
+      "market_cap_usd": 52754624862,
+      "delta_symbol": "SOLUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "SOLUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "id": "tron",
+      "name": "TRON",
+      "symbol": "TRX",
+      "market_cap_usd": 30447656532,
+      "delta_symbol": "TRXUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "TRXUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "id": "figure-heloc",
+      "name": "Figure Heloc",
+      "symbol": "FIGR_HELOC",
+      "market_cap_usd": 28099707211,
+      "delta_symbol": null,
+      "delta_candidates": []
+    },
+    {
+      "rank": 10,
+      "id": "zcash",
+      "name": "Zcash",
+      "symbol": "ZEC",
+      "market_cap_usd": 21520901456,
+      "delta_symbol": "ZECUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "ZECUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 11,
+      "id": "hyperliquid",
+      "name": "Hyperliquid",
+      "symbol": "HYPE",
+      "market_cap_usd": 18481094604,
+      "delta_symbol": "HYPEUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "HYPEUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 12,
+      "id": "monero",
+      "name": "Monero",
+      "symbol": "XMR",
+      "market_cap_usd": 11282017996,
+      "delta_symbol": "XMRUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "XMRUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 13,
+      "id": "dogecoin",
+      "name": "Dogecoin",
+      "symbol": "DOGE",
+      "market_cap_usd": 11168266295,
+      "delta_symbol": "DOGEUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "DOGEUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 14,
+      "id": "usds",
+      "name": "USDS",
+      "symbol": "USDS",
+      "market_cap_usd": 8836113771,
+      "delta_symbol": null,
+      "delta_candidates": []
+    },
+    {
+      "rank": 15,
+      "id": "whitebit",
+      "name": "WhiteBIT Coin",
+      "symbol": "WBT",
+      "market_cap_usd": 8642766103,
+      "delta_symbol": null,
+      "delta_candidates": []
+    },
+    {
+      "rank": 16,
+      "id": "leo-token",
+      "name": "LEO Token",
+      "symbol": "LEO",
+      "market_cap_usd": 8551707810,
+      "delta_symbol": null,
+      "delta_candidates": []
+    },
+    {
+      "rank": 17,
+      "id": "chainlink",
+      "name": "Chainlink",
+      "symbol": "LINK",
+      "market_cap_usd": 8249381360,
+      "delta_symbol": "LINKUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "LINKUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 18,
+      "id": "cardano",
+      "name": "Cardano",
+      "symbol": "ADA",
+      "market_cap_usd": 6779869773,
+      "delta_symbol": "ADAUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "ADAUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 19,
+      "id": "stellar",
+      "name": "Stellar",
+      "symbol": "XLM",
+      "market_cap_usd": 5306775175,
+      "delta_symbol": "XLMUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "XLMUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    },
+    {
+      "rank": 20,
+      "id": "bitcoin-cash",
+      "name": "Bitcoin Cash",
+      "symbol": "BCH",
+      "market_cap_usd": 4976197137,
+      "delta_symbol": "BCHUSD",
+      "delta_candidates": [
+        {
+          "delta_symbol": "BCHUSD",
+          "state": "live",
+          "trading_status": "operational",
+          "contract_type": "perpetual_futures",
+          "quoting_asset": "USD"
+        }
+      ]
+    }
+  ]
+}
