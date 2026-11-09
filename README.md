@@ -70,7 +70,7 @@ delta:BTCUSD
 
 ### 3. Upstox
 
-The original Upstox integration retrieves historical candles using an instrument key directly. It remains available in `delta_vault/upstox/` but is not yet connected to the shared Hugging Face client catalog.
+The existing Upstox Parquet files are also discoverable through the shared client using identifiers such as `upstox:RELIANCE`.
 
 ## Member Usage
 
@@ -185,6 +185,8 @@ The reader supports the existing repository without migration:
 ```text
 Binance/data/<SYMBOL>.parquet
 Delta_Exchange/data/<SYMBOL>/<YYYY-MM>.parquet
+upstox/data/1hr/<SYMBOL>.parquet
+upstox/data/1m/<SYMBOL>.parquet
 manifest.json                    # used when available
 ```
 

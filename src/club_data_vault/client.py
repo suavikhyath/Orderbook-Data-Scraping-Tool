@@ -19,6 +19,10 @@ def _interval(path: str, item: dict) -> str:
         return "1d"
     if path.startswith("Binance/"):
         return "1h"
+    if path.startswith("upstox/data/1hr/"):
+        return "1h"
+    if path.startswith("upstox/data/1m/"):
+        return "1m"
     return (item.get("intervals") or [""])[0]
 
 
