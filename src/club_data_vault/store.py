@@ -31,7 +31,12 @@ class DatasetStore:
     def catalog(self) -> list[dict]:
         try:
             manifest = json.loads(Path(self.download("manifest.json")).read_text())
-            return manifest.get("instruments", [])
+            catalog = {item["instrument_id"]: item for item in manifest.get("instruments", [])}
+            for item in self._discover_catalog():
+                current = catalog.setdefault(item["instrument_id"], item)
+                current["paths"] = sorted(set(current.get("paths", []) + item.get("paths", [])))
+                current["intervals"] = sorted(set(current.get("intervals", []) + item.get("intervals", [])))
+            return sorted(catalog.values(), key=lambda item: item["instrument_id"])
         except EntryNotFoundError:
             return self._discover_catalog()
 
@@ -61,6 +66,24 @@ class DatasetStore:
                     },
                 )
                 item["paths"].append(path)
+            elif len(parts) == 4 and parts[0] == "upstox" and parts[1] == "data" and path.endswith(".parquet"):
+                symbol = Path(parts[-1]).stem.upper()
+                interval = {"1hr": "1h", "1m": "1m"}.get(parts[2])
+                if interval is None:
+                    continue
+                item = grouped.setdefault(
+                    f"upstox:{symbol}",
+                    {
+                        "instrument_id": f"upstox:{symbol}",
+                        "exchange": "upstox",
+                        "symbol": symbol,
+                        "intervals": [],
+                        "paths": [],
+                    },
+                )
+                item["intervals"].append(interval)
+                item["paths"].append(path)
         for item in grouped.values():
+            item["intervals"] = sorted(set(item["intervals"]))
             item["paths"].sort()
         return sorted(grouped.values(), key=lambda item: item["instrument_id"])
